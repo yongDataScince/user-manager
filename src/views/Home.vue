@@ -27,10 +27,6 @@ export default {
       adding: state => state.adding
     })
   },
-
-  methods: {
-    
-  },
   
   components: {
     UsersList,

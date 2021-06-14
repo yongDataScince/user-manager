@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-main">
+  <div class="modal-main" @keydown.esc="exit">
     <div class="modal-content">
       <input type="text" placeholder="@username" class="input" v-model="username">
       <input type="text" placeholder="Full Name" class="input" v-model="fullname">
@@ -96,6 +96,10 @@ export default {
       this.username, this.fullname, this.email, this.userTags, this.curator = ''
       this.addUser(data)
       this.TOGGLE_MODE(false)
+    },
+
+    exit() {
+      this.TOGGLE_MODE(false) // exit on esc. 
     }
   },
 

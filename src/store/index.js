@@ -64,7 +64,7 @@ export default new Vuex.Store({
     },
 
     SORT_DATE(state) {
-      state.users = state.users.sort((a, b) => a.created_at > b.created_at)
+      state.users.sort((a, b) => a.created_at > b.created_at)
     },
 
     SEARCH_USER(state, payload) {
@@ -86,7 +86,9 @@ export default new Vuex.Store({
       payload.created_at = new Date().getTime()
       payload.edited_at = new Date().getTime()
       payload.choise, payload.saved = false
-      state.users.unshift(payload)
+      // state.users.unshift(payload)
+      state.users.push(payload)
+
     },
     
     TOGGLE_MODE(state, payload) {
