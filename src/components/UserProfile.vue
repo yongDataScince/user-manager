@@ -126,6 +126,7 @@ export default {
 
     selected(data) {
       this.userData.curator = data 
+      this.disableSave = false
     },
 
     openTagsDropdown() {
