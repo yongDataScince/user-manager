@@ -117,6 +117,9 @@ export default {
 
     save() {
       let edited_user = {...this.user, ...this.userData}
+      if (!this.userData.username) {
+        edited_user.username = this.user.username
+      }
       this.saveUser(edited_user)
       this.disableSave = true
       this.userData = {}
