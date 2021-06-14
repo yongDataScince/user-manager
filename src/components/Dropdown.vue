@@ -58,6 +58,10 @@
         required: false,
         default: 6,
         note: 'Max items showing'
+      },
+      saved: {
+        type: Boolean,
+        require: true
       }
     },
 
@@ -127,6 +131,9 @@
           this.selected = this.filteredOptions[0];
         }
         this.$emit('filter', this.searchFilter);
+      },
+      saved() {
+        this.searchFilter = ''
       }
     }
   };

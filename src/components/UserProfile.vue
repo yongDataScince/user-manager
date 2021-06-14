@@ -16,6 +16,7 @@
         <input type="text" 
                id="username" 
                class="input" 
+               ref="input"
                :placeholder="`@${user.username}`"
                v-model="userData.username">
 
@@ -23,6 +24,7 @@
         <input type="text" 
                id="email" 
                class="input"
+               ref="input"
                :placeholder="user.email"
                v-model="userData.email">
 
@@ -40,7 +42,7 @@
           <button class="add" :disabled="user.tags.length>=5" @click="openTagsDropdown" >
             <i class="icon-add"></i>
           </button>
-          <div v-show="tagsDropdownTrigger && avaiableTags.length > 0" class="tags-drop">
+          <div v-show="tagsDropdownTrigger && avaiableTags.length > 0" class="tags-drop" >
             <div v-for="tag in avaiableTags" 
                  :key="tag"
                  @click="choiseTag(tag)"
@@ -54,17 +56,18 @@
         <Dropdown 
           @selected="selected"
           :options="curators"
+          :saved="!disableSave"
           :name="userData.curator"
           :placeholder="curator"
           :maxItem="5"
         />
 
         <div class="form-footer">
-          <button :disabled="disableSave" @click="save(user)" class="save-btn">
+          <button :disabled="disableSave" @click="save(user)" class="save-btn" ref="input">
             <i class="icon-save"></i>
             Save changes
           </button>
-          <button :disabled="!this.user.saved" @click="discard(user.id)" class="discard-btn">
+          <button :disabled="!this.user.saved" @click="discard(user.id)" class="discard-btn" ref="input">
             <i class="icon-discard"></i>
             Discard
           </button>
@@ -112,10 +115,11 @@ export default {
       discardUser: 'discardUser'
     }),
 
-    async save() {
+    save() {
       let edited_user = {...this.user, ...this.userData}
-      await this.saveUser(edited_user)
+      this.saveUser(edited_user)
       this.disableSave = true
+      this.userData = {}
     },
 
     discard(id) {
@@ -136,21 +140,15 @@ export default {
     choiseTag(name) {
       this.addTag(name)
       this.tagsDropdownTrigger = false
-    },
-
-    enableInp(name) {
-      this.enable = name
+      this.disableSave = false
     }
   },
 
   watch: {
     userData: {
       handler(e) {
-        this.userData.username = e.username.trim()
-        this.userData.email = e.email.trim()
-        this.userData.curator = e.curator.trim()
-
-        if(e.username || e.email || e.curator) {
+        let validateUsename = this.curators.map(i => i.name).includes(e.username)
+        if(e.username && !validateUsename || e.email || e.curator) {
           this.disableSave = false
         } else {
           this.disableSave = true
@@ -159,12 +157,7 @@ export default {
       deep: true
     },
 
-    user: {
-      handler(e) {
-        this.disableSave = e != this.userData
-      },
-      deep: true
-    }
+    
   },
 
   components: {

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import data from "../data/users.json"
+const data = require("../data/users.json")
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -12,12 +13,12 @@ export default new Vuex.Store({
   },
 
   mutations: {
-    SET_USERS(state, payload) {
-      state.users = payload // set all users from json file
-      state.users = state.users.map(i => {
-        i.choise, i.saved = false
+    SET_USERS(state) {
+      state.users = data.map(i => {
+        i.choise, i.saved = false // for develop
         return i
-      })
+      }) // set all users from json file
+      
     },
 
     CHOISE(state, payload) {
@@ -74,8 +75,7 @@ export default new Vuex.Store({
     DISCARD_USER(state, payload) {
       state.users = state.users.map(i => {
         if(i.id == payload) {
-          console.log(data.filter(i => i.id == payload)[0])
-          return data.filter(i => i.id == payload)[0]
+          return data.filter(i => i.id === payload)[0]
         }
         return i
       })
@@ -86,9 +86,7 @@ export default new Vuex.Store({
       payload.created_at = new Date().getTime()
       payload.edited_at = new Date().getTime()
       payload.choise, payload.saved = false
-      // state.users.unshift(payload)
-      state.users.push(payload)
-
+      state.users.unshift(payload)
     },
     
     TOGGLE_MODE(state, payload) {
@@ -98,7 +96,7 @@ export default new Vuex.Store({
 
   actions: {
     loadUsers({ commit }) {
-      commit("SET_USERS", data)
+      commit("SET_USERS")
       commit("CHOISE", 0) // default choise first user for check his profile
     },
 
